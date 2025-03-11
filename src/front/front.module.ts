@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { FrontController } from './front/front.controller';
 
-@Module({})
-export class FrontModule {}
+@Module({
+  controllers: [FrontController],
+})
+export class FrontModule { }
