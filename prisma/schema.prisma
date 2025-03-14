@@ -9,6 +9,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Content {
+  @@map("content") // Ensure table name is `content`
+
+  id             BigInt   @id @default(autoincrement())
+  relatedId      BigInt?  @map("related_id")
+  relatedContent Content? @relation("SelfReference", fields: [relatedId], references: [id])
+  relatedFrom    Content[] @relation("SelfReference")
+
+  distributorStudioId BigInt? @map("distributor_studio_id")
+  externalId          String? @map("external_id")
+  status              Int
+  filename            String
+  adultPlus           Boolean @default(false) @map("adult_plus")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
+
+  // Additional Fields
+  countryOfOrigin     String? @map("country_of_origin")
+  director           String? @map("director")
+  length             BigInt?
+  originalTitle      String? @map("original_title")
+  originalDescription String? @map("original_description")
+  producedAt         DateTime? @map("produced_at")
+}
+
